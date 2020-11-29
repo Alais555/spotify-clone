@@ -1,51 +1,69 @@
-import React, { useEffect, useState } from "react";
-import Login from "./Login";
-import "./App.css";
-import { getTokenFromUrl } from "./spotify";
+import React, { useEffect } from "react";
 import SpotifyWebApi from "spotify-web-api-js";
+import { useStateValue } from "./StateProvider";
 import Player from "./Player";
-import { useDataLayerValue } from "./DataLayer";
+import { getTokenFromURL } from "./spotify";
+import "./App.css";
+import Login from "./Login";
 
-const spotify = new SpotifyWebApi();
+const s = new SpotifyWebApi();
 
 function App() {
-  const [{ user, token }, dispatch] = useDataLayerValue();
+  const [{ token }, dispatch] = useStateValue();
 
   useEffect(() => {
-    const hash = getTokenFromUrl();
+    // Set token
+    const hash = getTokenFromResponse();
     window.location.hash = "";
-    const _token = hash.access_token;
+    let _token = hash.access_token;
+
     if (_token) {
+      s.setAccessToken(_token);
+
       dispatch({
         type: "SET_TOKEN",
         token: _token,
       });
-      console.log("[token]", token);
-      spotify.setAccessToken(_token);
-      spotify.getMe().then((user) => {
+
+      s.getPlaylist("37i9dQZEVXcJZyENOWUFo7").then((response) =>
+        dispatch({
+          type: "SET_DISCOVER_WEEKLY",
+          discover_weekly: response,
+        })
+      );
+
+      s.getMyTopArtists().then((response) =>
+        dispatch({
+          type: "SET_TOP_ARTISTS",
+          top_artists: response,
+        })
+      );
+
+      dispatch({
+        type: "SET_SPOTIFY",
+        spotify: s,
+      });
+
+      s.getMe().then((user) => {
         dispatch({
           type: "SET_USER",
           user,
         });
       });
-      spotify.getUserPlaylists().then((playlists) => {
+
+      s.getUserPlaylists().then((playlists) => {
         dispatch({
           type: "SET_PLAYLISTS",
           playlists,
         });
       });
-      spotify.getPlaylist("37i9dQZF1E34Ucml4HHx1w").then((playlist) => {
-        dispatch({
-          type: "SET_DISCOVER_WEEKLY",
-          discover_weekly: playlist,
-        });
-      });
     }
-  }, []);
+  }, [token, dispatch]);
 
   return (
-    <div className="App">
-      {token ? <Player spotify={spotify} /> : <Login />}
+    <div className="app">
+      {!token && <Login />}
+      {token && <Player spotify={s} />}
     </div>
   );
 }
