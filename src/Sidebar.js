@@ -3,28 +3,29 @@ import "./Sidebar.css";
 import SidebarOption from "./SidebarOption";
 import HomeIcon from "@material-ui/icons/Home";
 import SearchIcon from "@material-ui/icons/Search";
-import { LibraryMusic } from "@material-ui/icons";
-import { useDataLayerValue } from "./DataLayer";
+import LibraryMusicIcon from "@material-ui/icons/LibraryMusic";
+import { getTokenFromResponse } from "./spotify";
+import { useStateValue } from "./StateProvider";
 
 function Sidebar() {
-  const [{ playlists }, dispatch] = useDataLayerValue();
+  const [{ playlists }, dispatch] = useStateValue();
+  console.log(playlists);
 
   return (
     <div className="sidebar">
       <img
         className="sidebar__logo"
-        src="https://music-b26f.kxcdn.com/wp-content/uploads/2017/06/635963274692858859903160895_spotify-logo-horizontal-black.jpg"
-        alt="Spotify logo"
+        src="https://getheavy.com/wp-content/uploads/2019/12/spotify2019-830x350.jpg"
+        alt=""
       />
-
-      <SidebarOption title="Home" Icon={HomeIcon} />
-      <SidebarOption title="Search" Icon={SearchIcon} />
-      <SidebarOption title="Your Library" Icon={LibraryMusic} />
+      <SidebarOption Icon={HomeIcon} option="Home" />
+      <SidebarOption Icon={SearchIcon} option="Search" />
+      <SidebarOption Icon={LibraryMusicIcon} option="Your Library" />
       <br />
       <strong className="sidebar__title">PLAYLISTS</strong>
       <hr />
       {playlists?.items?.map((playlist) => (
-        <SidebarOption title={playlist.name} />
+        <SidebarOption option={playlist.name} />
       ))}
     </div>
   );
