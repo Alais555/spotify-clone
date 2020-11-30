@@ -1,6 +1,6 @@
 # **Spotify Clone with React JS :wave:**
 
-A small web app that tries to imitate the app version of spotify app, you can sign in to your spotify account, and view your playlists and has your user authentification feauture thanks to Firebase and spotify api. Not functional to listen to songs and so on, except to move volume control.
+A small web app that tries to imitate the homepage of spotify (responsive), you can sign in to your spotify account, and view your playlists and has your user authentification feauture thanks to Firebase and spotify api. Not functional to listen to songs and so on, except to move volume control.
 
 ## Languages 
 
