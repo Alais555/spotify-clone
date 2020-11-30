@@ -15,4 +15,4 @@ A small web app that tries to imitate the homepage of spotify (responsive), you 
 
 ## Link 
 
-https://spotify-clone-69752.web.app/callback/
+http://spotify-clone-69752.web.app/callback/
